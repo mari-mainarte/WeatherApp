@@ -12,9 +12,11 @@ namespace WeatherApp.Services
     public class WeatherAppService
     {
         private HttpClient httpClient;
-        private City cidade;
+        private City city;
         private JsonSerializerOptions jsonSerializerOptions;
         private string apiKey = "21a98e40b60436fb3cc8fe3abc8f3f4b";
+        private CancellationTokenSource _cancelTokenSource;
+        private bool _isCheckingLocation;
 
         public WeatherAppService()
         {
@@ -26,7 +28,7 @@ namespace WeatherApp.Services
             };
         }
 
-        public async Task<City> GetCidadeAsync(string cityName)
+        public async Task<City> GetCityAsync(string cityName)
         {
             Uri uri = new Uri($"https://api.openweathermap.org/data/2.5/weather?q={cityName}&units=metric&appid={apiKey}&lang=pt_br");
             try
@@ -35,14 +37,57 @@ namespace WeatherApp.Services
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
-                    cidade = JsonSerializer.Deserialize<City>(content, jsonSerializerOptions);
+                    city = JsonSerializer.Deserialize<City>(content, jsonSerializerOptions);
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine(@"\tERROR {0}", e.Message);
             }
-            return cidade;
+            return city;
+        }
+
+        public async Task<City> GetCurrentLocation()
+        {
+           
+            try
+            {
+                _isCheckingLocation = true;
+
+                GeolocationRequest request = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(0.2));
+
+                _cancelTokenSource = new CancellationTokenSource();
+
+                Location location = await Geolocation.Default.GetLocationAsync(request, _cancelTokenSource.Token);
+
+                if (location.Latitude != null && location.Longitude != null)
+                {
+                    Uri uri = new Uri($"https://api.openweathermap.org/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&units=metric&appid={apiKey}&lang=pt_br");
+                    try
+                    {
+                        HttpResponseMessage response = await httpClient.GetAsync(uri);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string content = await response.Content.ReadAsStringAsync();
+                            city = JsonSerializer.Deserialize<City>(content, jsonSerializerOptions);
+                            
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(@"\tERROR {0}", e.Message);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Erro: " + e.Message);
+            }
+            finally
+            {
+                _isCheckingLocation = false;
+            }
+            return city;
         }
     }
 }

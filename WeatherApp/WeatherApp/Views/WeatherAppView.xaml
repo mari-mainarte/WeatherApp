@@ -11,46 +11,52 @@
             <HorizontalStackLayout
                 BackgroundColor="#d9ffffff"
                 HeightRequest="{OnIdiom Phone=65,
-                                        Desktop=150}"
+                                        Desktop=100}"
                 WidthRequest="{OnIdiom Phone=700,
-                                       Desktop=300}">
+                                       Desktop=2000}">
                 <Image
-                    Margin="300,15,0,15"
+                    Margin="900,15,0,15"
                     HeightRequest="{OnIdiom Phone=45,
-                                            Desktop=150}"
+                                            Desktop=90}"
                     Source="openweather_logo.png" />
             </HorizontalStackLayout>
             <Label
                 Margin="0,65,0,0"
                 FontAttributes="Bold"
-                FontSize="25"
+                FontSize="{OnIdiom Phone=25,
+                                   Desktop=40}"
                 HorizontalOptions="Center"
                 Text="Pesquise o clima da sua cidade"
                 TextColor="White" />
 
-            <HorizontalStackLayout Margin="0,75,0,0" Spacing="20">
-                <HorizontalStackLayout Margin="15,0,0,0" HorizontalOptions="Center">
+            <HorizontalStackLayout
+                Margin="0,75,0,0"
+                HorizontalOptions="Center"
+                Spacing="20">
+                <HorizontalStackLayout Margin="15,0,0,0">
                     <Entry
                         BackgroundColor="White"
-                        FontSize="20"
-                        HeightRequest="{OnIdiom Phone=45}"
+                        FontSize="{OnIdiom Phone=17,
+                                           Desktop=20}"
+                        HeightRequest="{OnIdiom Phone=45,
+                                                Desktop=50}"
                         Keyboard="Text"
                         Placeholder="Nome da sua cidade"
                         Text="{Binding CityName}"
                         TextColor="#464648"
                         WidthRequest="{OnIdiom Phone=210,
-                                               Desktop=250}" />
+                                               Desktop=350}" />
 
                     <ImageButton
                         BackgroundColor="#EB6B4B"
-                        Command="{Binding getCidadeCommand}"
+                        Command="{Binding getCityCommand}"
                         HeightRequest="{OnIdiom Phone=45,
-                                                Desktop=35}"
+                                                Desktop=50}"
                         Source="icone_lupa.png" />
                 </HorizontalStackLayout>
                 <Button
-                    x:Name="gpsButton"
                     BackgroundColor="#EB6E4B"
+                    Command="{Binding getCityGpsCommand}"
                     FontAttributes="Bold"
                     Text="GPS"
                     TextColor="White"
@@ -60,11 +66,13 @@
             <Border
                 Margin="0,60,0,0"
                 BackgroundColor="#87ffffff"
-                HeightRequest="{OnIdiom Phone=400}"
+                HeightRequest="{OnIdiom Phone=400,
+                                        Desktop=420}"
                 HorizontalOptions="Center"
                 IsVisible="{Binding IsVisible}"
                 Stroke="Transparent"
-                WidthRequest="{OnIdiom Phone=350}">
+                WidthRequest="{OnIdiom Phone=350,
+                                       Desktop=450}">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="10,10,10,10" />
                 </Border.StrokeShape>
@@ -99,10 +107,7 @@
                         TextColor="#48484A" />
 
                     <HorizontalStackLayout Margin="0,0,12,40" HorizontalOptions="Center">
-                        <Image
-                            Margin="0,5"
-                            HeightRequest="{OnIdiom Phone=45}"
-                            Source="{Binding WeatherIcon}" />
+                        <Image HeightRequest="{OnIdiom Phone=45, Desktop=50}" Source="{Binding WeatherIcon}" />
                         <Label
                             Margin="0,8,0,0"
                             FontSize="23"

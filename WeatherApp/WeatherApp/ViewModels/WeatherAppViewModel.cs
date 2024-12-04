@@ -13,7 +13,7 @@ namespace WeatherApp.ViewModels
     public partial class WeatherAppViewModel: ObservableObject
     {
         [ObservableProperty]
-        City cidade;
+        City city;
 
         [ObservableProperty]
         string cityName;
@@ -43,26 +43,39 @@ namespace WeatherApp.ViewModels
         private string weatherIcon;
 
         WeatherAppService weatherAppService;
-        public ICommand getCidadeCommand { get; }
+        public ICommand getCityCommand { get; }
+        public ICommand getCityGpsCommand { get; }
 
         public WeatherAppViewModel()
         {
-            getCidadeCommand = new Command(getCidade);
+            getCityCommand = new Command(getCity);
+            getCityGpsCommand = new Command(getCityGps);
             weatherAppService = new WeatherAppService();
         }
 
-        public async void getCidade()
+        public async void defCityProperties(City city)
         {
-            Cidade = await weatherAppService.GetCidadeAsync(cityName);
-            string country = Cidade.Sys.Country;
-            Name = Cidade.Name + ", " + country;
-            Temp = Math.Round(Cidade.Main.Temp).ToString() + "ºC";
-            Description = Cidade.Weather[0].Description;
-            Humidity = Cidade.Main.Humidity.ToString() + "%";
-            Speed = Cidade.Wind.Speed.ToString() + "km/h";
+            string country = city.Sys.Country;
+            Name = city.Name + ", " + country;
+            Temp = Math.Round(city.Main.Temp).ToString() + "ºC";
+            Description = city.Weather[0].Description;
+            Humidity = city.Main.Humidity.ToString() + "%";
+            Speed = city.Wind.Speed.ToString() + "km/h";
             FlagIcon = $"https://flagsapi.com/{country}/flat/64.png";
-            WeatherIcon = $"https://openweathermap.org/img/wn/{Cidade.Weather[0].Icon}@2x.png";
+            WeatherIcon = $"https://openweathermap.org/img/wn/{city.Weather[0].Icon}@2x.png";
             IsVisible = true;
+        }
+
+        public async void getCity()
+        {
+            City = await weatherAppService.GetCityAsync(CityName);
+            defCityProperties(City);
+        }
+
+        public async void getCityGps()
+        {
+            City = await weatherAppService.GetCurrentLocation();
+            defCityProperties(City);
         }
     }
 }
