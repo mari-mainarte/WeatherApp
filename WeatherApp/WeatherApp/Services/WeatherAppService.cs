@@ -15,8 +15,8 @@ namespace WeatherApp.Services
         private City city;
         private JsonSerializerOptions jsonSerializerOptions;
         private string apiKey = "21a98e40b60436fb3cc8fe3abc8f3f4b";
-        private CancellationTokenSource _cancelTokenSource;
-        private bool _isCheckingLocation;
+
+
 
         public WeatherAppService()
         {
@@ -47,20 +47,14 @@ namespace WeatherApp.Services
             return city;
         }
 
-        public async Task<City> GetCurrentLocation()
+        public async Task<City> GetCityGps()
         {
-           
+
             try
             {
-                _isCheckingLocation = true;
+                Location location = await Geolocation.Default.GetLastKnownLocationAsync();
 
-                GeolocationRequest request = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(0.2));
-
-                _cancelTokenSource = new CancellationTokenSource();
-
-                Location location = await Geolocation.Default.GetLocationAsync(request, _cancelTokenSource.Token);
-
-                if (location.Latitude != null && location.Longitude != null)
+                if (location != null)
                 {
                     Uri uri = new Uri($"https://api.openweathermap.org/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&units=metric&appid={apiKey}&lang=pt_br");
                     try
@@ -70,7 +64,7 @@ namespace WeatherApp.Services
                         {
                             string content = await response.Content.ReadAsStringAsync();
                             city = JsonSerializer.Deserialize<City>(content, jsonSerializerOptions);
-                            
+
                         }
                     }
                     catch (Exception e)
@@ -82,10 +76,6 @@ namespace WeatherApp.Services
             catch (Exception e)
             {
                 Debug.WriteLine("Erro: " + e.Message);
-            }
-            finally
-            {
-                _isCheckingLocation = false;
             }
             return city;
         }

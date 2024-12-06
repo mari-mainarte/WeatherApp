@@ -42,6 +42,12 @@ namespace WeatherApp.ViewModels
         [ObservableProperty]
         private string weatherIcon;
 
+        [ObservableProperty]
+        private string tempMin;
+
+        [ObservableProperty]
+        private string tempMax;
+
         WeatherAppService weatherAppService;
         public ICommand getCityCommand { get; }
         public ICommand getCityGpsCommand { get; }
@@ -63,6 +69,8 @@ namespace WeatherApp.ViewModels
             Speed = city.Wind.Speed.ToString() + "km/h";
             FlagIcon = $"https://flagsapi.com/{country}/flat/64.png";
             WeatherIcon = $"https://openweathermap.org/img/wn/{city.Weather[0].Icon}@2x.png";
+            TempMin = "Mínima: " + ((int)city.Main.Temp_min).ToString() + "º";
+            TempMax = "Máxima: " + ((int)city.Main.Temp_max).ToString() + "º";
             IsVisible = true;
         }
 
@@ -74,7 +82,7 @@ namespace WeatherApp.ViewModels
 
         public async void getCityGps()
         {
-            City = await weatherAppService.GetCurrentLocation();
+            City = await weatherAppService.GetCityGps();
             defCityProperties(City);
         }
     }
