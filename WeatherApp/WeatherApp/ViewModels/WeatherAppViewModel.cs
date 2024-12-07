@@ -48,6 +48,10 @@ namespace WeatherApp.ViewModels
         [ObservableProperty]
         private string tempMax;
 
+        [ObservableProperty]
+        private string backgroundColor;
+
+        [ObservableProperty]
         WeatherAppService weatherAppService;
         public ICommand getCityCommand { get; }
         public ICommand getCityGpsCommand { get; }
@@ -57,6 +61,7 @@ namespace WeatherApp.ViewModels
             getCityCommand = new Command(getCity);
             getCityGpsCommand = new Command(getCityGps);
             weatherAppService = new WeatherAppService();
+            getCityGps();
         }
 
         public async void defCityProperties(City city)
@@ -68,10 +73,19 @@ namespace WeatherApp.ViewModels
             Humidity = city.Main.Humidity.ToString() + "%";
             Speed = city.Wind.Speed.ToString() + "km/h";
             FlagIcon = $"https://flagsapi.com/{country}/flat/64.png";
-            WeatherIcon = $"https://openweathermap.org/img/wn/{city.Weather[0].Icon}@2x.png";
-            TempMin = "Mínima: " + ((int)city.Main.Temp_min).ToString() + "º";
-            TempMax = "Máxima: " + ((int)city.Main.Temp_max).ToString() + "º";
+            WeatherIcon = $"i{city.Weather[0].Icon}.png";
+            TempMin = "Mínima: " + Math.Round(city.Main.Temp_min).ToString() + "ºC";
+            TempMax = "Máxima: " + Math.Round(city.Main.Temp_max).ToString() + "ºC";
             IsVisible = true;
+
+            //verifica se é dia ou noite
+            if(WeatherIcon.Contains("d") ){
+                BackgroundColor = "#41A5F5";
+            }
+            else
+            {
+                BackgroundColor = "#004f92";
+            }
         }
 
         public async void getCity()

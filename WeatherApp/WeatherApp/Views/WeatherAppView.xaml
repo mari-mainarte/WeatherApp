@@ -4,30 +4,31 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="WeatherAppView"
-    BackgroundColor="#41A5F5"
+    BackgroundColor="{Binding BackgroundColor}"
     Shell.NavBarIsVisible="False">
     <ScrollView>
         <VerticalStackLayout HorizontalOptions="Center">
-            <VerticalStackLayout.Margin>
-                <OnIdiom x:TypeArguments="Thickness">
-                    <OnIdiom.Phone>0,60,0,0</OnIdiom.Phone>
-                    <OnIdiom.Desktop>0,200,0,0</OnIdiom.Desktop>
-                </OnIdiom>
-            </VerticalStackLayout.Margin>
-            <Label
-                Margin="30,0,0,0"
-                FontAttributes="Bold"
-                FontSize="{OnIdiom Phone=23,
-                                   Desktop=40}"
-                Text="Pesquise o clima da sua cidade"
-                TextColor="White" />
+
+            <VerticalStackLayout
+                Padding="0,0,81,0"
+                BackgroundColor="#4dffffff"
+                HorizontalOptions="StartAndExpand">
+                <Label
+                    Margin="100,15,30,15"
+                    FontAttributes="Bold"
+                    FontSize="{OnIdiom Phone=30,
+                                       Desktop=40}"
+                    HorizontalOptions="Center"
+                    Text="Weather App"
+                    TextColor="white" />
+            </VerticalStackLayout>
 
             <!--  Área da pesuisa e gps  -->
             <HorizontalStackLayout
-                Margin="0,40,0,0"
+                Margin="0,45,0,0"
                 HorizontalOptions="Center"
                 Spacing="20">
-                <HorizontalStackLayout Margin="15,0,0,0">
+                <HorizontalStackLayout>
                     <Entry
                         BackgroundColor="White"
                         FontSize="{OnIdiom Phone=17,
@@ -58,10 +59,7 @@
             </HorizontalStackLayout>
 
             <!--  Nome e bandeira cidade  -->
-            <HorizontalStackLayout
-                Margin="15,30,5,0"
-                HorizontalOptions="Start"
-                IsVisible="{Binding IsVisible}">
+            <HorizontalStackLayout Margin="20,40,5,0" HorizontalOptions="Start">
                 <Image
                     Margin="0,0,10,0"
                     HeightRequest="{OnIdiom Phone=27,
@@ -84,69 +82,84 @@
 
             <!--  Ícone clima  -->
             <Image
-                Margin="20,0,0,0"
-                HeightRequest="{OnIdiom Phone=270,
+                Margin="20,35,0,35"
+                HeightRequest="{OnIdiom Phone=195,
                                         Desktop=50}"
                 Source="{Binding WeatherIcon}" />
 
-            <!--  Info cidade  -->
-            <VerticalStackLayout IsVisible="{Binding IsVisible}">
+            <Border
+                BackgroundColor="#4dffffff"
+                HeightRequest="{OnIdiom Phone=250,
+                                        Desktop=420}"
+                Stroke="Transparent"
+                WidthRequest="{OnIdiom Phone=360,
+                                       Desktop=450}">
 
-                <!--  Temperatura e descrição  -->
-                <HorizontalStackLayout HorizontalOptions="Start">
-                    <Label
-                        Margin="40,0,0,30"
-                        FontSize="55"
-                        HorizontalOptions="Center"
-                        Text="{Binding Temp}"
-                        TextColor="#ffffff" />
-                    <Label
-                        Margin="20,36,0,0"
-                        FontAttributes="Bold"
-                        FontSize="20"
-                        Text="{Binding Description}"
-                        TextColor="#ffffff" />
-                </HorizontalStackLayout>
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
 
-                <!--  máxima e mínima  -->
-                <HorizontalStackLayout
-                    Margin="40,0,0,40"
-                    HorizontalOptions="Start"
-                    Spacing="40">
-                    <Label
-                        FontAttributes="Bold"
-                        FontSize="20"
-                        Text="{Binding TempMin}"
-                        TextColor="white" />
-                    <Label
-                        FontAttributes="Bold"
-                        FontSize="20"
-                        Text="{Binding TempMax}"
-                        TextColor="white" />
-                </HorizontalStackLayout>
+                <!--  Info cidade  -->
+                <VerticalStackLayout Margin="0,10,0,0">
 
-                <!--  Humidade e vento  -->
-                <HorizontalStackLayout
-                    Margin="40,0,0,0"
-                    HorizontalOptions="Start"
-                    Spacing="5">
-                    <Image HeightRequest="{OnIdiom Phone=25, Desktop=25}" Source="water_icon.png" />
-                    <Label
-                        FontSize="20"
-                        Text="{Binding Humidity}"
-                        TextColor="#ffffff" />
+                    <!--  Temperatura e descrição  -->
+                    <HorizontalStackLayout HorizontalOptions="Start">
+                        <Label
+                            Margin="20,0,0,30"
+                            FontSize="55"
+                            HorizontalOptions="Center"
+                            Text="{Binding Temp}"
+                            TextColor="#ffffff" />
+                        <Label
+                            Margin="20,36,0,0"
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            Text="{Binding Description}"
+                            TextColor="#ffffff" />
+                    </HorizontalStackLayout>
 
-                    <Image
+                    <!--  máxima e mínima  -->
+                    <HorizontalStackLayout
+                        Margin="20,0,0,40"
+                        HorizontalOptions="Start"
+                        Spacing="40">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            Text="{Binding TempMin}"
+                            TextColor="white" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            Text="{Binding TempMax}"
+                            TextColor="white" />
+                    </HorizontalStackLayout>
+
+                    <!--  Humidade e vento  -->
+                    <HorizontalStackLayout
                         Margin="20,0,0,0"
-                        HeightRequest="{OnIdiom Phone=30,
-                                                Desktop=30}"
-                        Source="wind_icon.png" />
-                    <Label
-                        FontSize="20"
-                        Text="{Binding Speed}"
-                        TextColor="#ffffff" />
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
+                        HorizontalOptions="Start"
+                        Spacing="5">
+                        <Image HeightRequest="{OnIdiom Phone=25, Desktop=25}" Source="water_icon.png" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            Text="{Binding Humidity}"
+                            TextColor="#ffffff" />
+
+                        <Image
+                            Margin="20,0,0,0"
+                            HeightRequest="{OnIdiom Phone=30,
+                                                    Desktop=30}"
+                            Source="wind_icon.png" />
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            Text="{Binding Speed}"
+                            TextColor="#ffffff" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
