@@ -47,35 +47,28 @@ namespace WeatherApp.Services
             return city;
         }
 
-        public async Task<City> GetCityGps()
+        public async Task<City> GetCityGpsAsync()
         {
+            var location = await Geolocation.GetLocationAsync();
 
-            try
+            if (location != null)
             {
-                Location location = await Geolocation.Default.GetLastKnownLocationAsync();
-
-                if (location != null)
+                Uri uri = new Uri($"https://api.openweathermap.org/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&units=metric&appid={apiKey}&lang=pt_br");
+                try
                 {
-                    Uri uri = new Uri($"https://api.openweathermap.org/data/2.5/weather?lat={location.Latitude}&lon={location.Longitude}&units=metric&appid={apiKey}&lang=pt_br");
-                    try
+                    HttpResponseMessage response = await httpClient.GetAsync(uri);
+                    if (response.IsSuccessStatusCode)
                     {
-                        HttpResponseMessage response = await httpClient.GetAsync(uri);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            string content = await response.Content.ReadAsStringAsync();
-                            city = JsonSerializer.Deserialize<City>(content, jsonSerializerOptions);
+                        string content = await response.Content.ReadAsStringAsync();
+                        city = JsonSerializer.Deserialize<City>(content, jsonSerializerOptions);
+                        Debug.WriteLine(location.Latitude.ToString(), location.Longitude.ToString());
 
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine(@"\tERROR {0}", e.Message);
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Erro: " + e.Message);
+                catch (Exception e)
+                {
+                    Debug.WriteLine(@"\tERROR {0}", e.Message);
+                }
             }
             return city;
         }

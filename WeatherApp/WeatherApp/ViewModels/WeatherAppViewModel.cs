@@ -96,7 +96,7 @@ namespace WeatherApp.ViewModels
 
         public async void getCityGps()
         {
-            City = await weatherAppService.GetCityGps();
+            City = await weatherAppService.GetCityGpsAsync();
             defCityProperties(City);
         }
     }

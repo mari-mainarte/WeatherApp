@@ -9,18 +9,28 @@
     <ScrollView>
         <VerticalStackLayout HorizontalOptions="Center">
 
-            <VerticalStackLayout
-                Padding="0,0,81,0"
-                BackgroundColor="#4dffffff"
-                HorizontalOptions="StartAndExpand">
+            <VerticalStackLayout BackgroundColor="#4dffffff" HorizontalOptions="StartAndExpand">
+                <VerticalStackLayout.Padding>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS, Android" Value="0,0,81,0" />
+
+                    </OnPlatform>
+                </VerticalStackLayout.Padding>
+
                 <Label
-                    Margin="100,15,30,15"
                     FontAttributes="Bold"
                     FontSize="{OnIdiom Phone=30,
-                                       Desktop=40}"
+                                       Desktop=50}"
                     HorizontalOptions="Center"
                     Text="Weather App"
-                    TextColor="white" />
+                    TextColor="white">
+                    <Label.Margin>
+                        <OnIdiom x:TypeArguments="Thickness">
+                            <OnIdiom.Phone>100,15,30,15</OnIdiom.Phone>
+                            <OnIdiom.Desktop>800,15,800,15</OnIdiom.Desktop>
+                        </OnIdiom>
+                    </Label.Margin>
+                </Label>
             </VerticalStackLayout>
 
             <!--  Área da pesuisa e gps  -->
@@ -40,7 +50,7 @@
                         Text="{Binding CityName}"
                         TextColor="#464648"
                         WidthRequest="{OnIdiom Phone=210,
-                                               Desktop=350}" />
+                                               Desktop=400}" />
 
                     <ImageButton
                         BackgroundColor="#464648"
@@ -55,20 +65,29 @@
                     FontAttributes="Bold"
                     Text="GPS"
                     TextColor="White"
-                    WidthRequest="80" />
+                    WidthRequest="{OnIdiom Phone=80,
+                                           Desktop=100}" />
             </HorizontalStackLayout>
 
             <!--  Nome e bandeira cidade  -->
-            <HorizontalStackLayout Margin="20,40,5,0" HorizontalOptions="Start">
+            <HorizontalStackLayout  HorizontalOptions="Start">
+                <HorizontalStackLayout.Margin>
+                    <OnIdiom x:TypeArguments="Thickness">
+                        <OnIdiom.Phone>20,40,5,0</OnIdiom.Phone>
+                        <OnIdiom.Desktop>620,40,5,0</OnIdiom.Desktop>
+                    </OnIdiom>
+                </HorizontalStackLayout.Margin>
+
                 <Image
                     Margin="0,0,10,0"
                     HeightRequest="{OnIdiom Phone=27,
-                                            Desktop=35}"
+                                            Desktop=40}"
                     Source="{Binding FlagIcon}" />
 
                 <Label
                     FontAttributes="Bold"
-                    FontSize="27"
+                    FontSize="{OnIdiom Phone=27,
+                                       Desktop=40}"
                     Text="{Binding Name}"
                     TextColor="#ffffff" />
 
@@ -77,23 +96,23 @@
                                             Desktop=25}"
                     Source="map_icon.png"
                     WidthRequest="{OnIdiom Phone=35,
-                                           Desktop=25}" />
+                                           Desktop=45}" />
             </HorizontalStackLayout>
 
             <!--  Ícone clima  -->
             <Image
                 Margin="20,35,0,35"
                 HeightRequest="{OnIdiom Phone=195,
-                                        Desktop=50}"
+                                        Desktop=260}"
                 Source="{Binding WeatherIcon}" />
 
             <Border
                 BackgroundColor="#4dffffff"
                 HeightRequest="{OnIdiom Phone=250,
-                                        Desktop=420}"
+                                        Desktop=320}"
                 Stroke="Transparent"
                 WidthRequest="{OnIdiom Phone=360,
-                                       Desktop=450}">
+                                       Desktop=550}">
 
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="10,10,10,10" />
@@ -106,14 +125,16 @@
                     <HorizontalStackLayout HorizontalOptions="Start">
                         <Label
                             Margin="20,0,0,30"
-                            FontSize="55"
+                            FontSize="{OnIdiom Phone=55,
+                                               Desktop=80}"
                             HorizontalOptions="Center"
                             Text="{Binding Temp}"
                             TextColor="#ffffff" />
                         <Label
                             Margin="20,36,0,0"
                             FontAttributes="Bold"
-                            FontSize="20"
+                            FontSize="{OnIdiom Phone=20,
+                                               Desktop=30}"
                             Text="{Binding Description}"
                             TextColor="#ffffff" />
                     </HorizontalStackLayout>
@@ -125,12 +146,14 @@
                         Spacing="40">
                         <Label
                             FontAttributes="Bold"
-                            FontSize="20"
+                            FontSize="{OnIdiom Phone=20,
+                                               Desktop=30}"
                             Text="{Binding TempMin}"
                             TextColor="white" />
                         <Label
                             FontAttributes="Bold"
-                            FontSize="20"
+                            FontSize="{OnIdiom Phone=20,
+                                               Desktop=30}"
                             Text="{Binding TempMax}"
                             TextColor="white" />
                     </HorizontalStackLayout>
@@ -140,10 +163,11 @@
                         Margin="20,0,0,0"
                         HorizontalOptions="Start"
                         Spacing="5">
-                        <Image HeightRequest="{OnIdiom Phone=25, Desktop=25}" Source="water_icon.png" />
+                        <Image HeightRequest="{OnIdiom Phone=25, Desktop=30}" Source="water_icon.png" />
                         <Label
                             FontAttributes="Bold"
-                            FontSize="20"
+                            FontSize="{OnIdiom Phone=20,
+                                               Desktop=25}"
                             Text="{Binding Humidity}"
                             TextColor="#ffffff" />
 
@@ -154,7 +178,8 @@
                             Source="wind_icon.png" />
                         <Label
                             FontAttributes="Bold"
-                            FontSize="20"
+                            FontSize="{OnIdiom Phone=20,
+                                               Desktop=25}"
                             Text="{Binding Speed}"
                             TextColor="#ffffff" />
                     </HorizontalStackLayout>
